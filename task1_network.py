@@ -7,6 +7,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+import torch.optim as optim
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+
 class MyNetwork(nn.Module):
 
     def __init__(self):
@@ -34,6 +38,16 @@ class MyNetwork(nn.Module):
         x = self.log_softmax(x)
         return x
 
+#helper to build train dataloader
+def make_train_loader(batch_size: int=64, data_dir: str="mnist_data"):
+    transform = transforms.Compose(
+        [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
+    )
+    train_set=datasets.MNIST(
+        root=data_dir, train=True, download=True, transform=transform
+    )
+    return DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=2)
+
 
 def main(argv):
     model = MyNetwork()
@@ -45,7 +59,30 @@ def main(argv):
     print("input shape:", tuple(x.shape))
     print("output shape:", tuple(y.shape))
     assert y.shape == (batch, 10), "expected [N, 10] after log_softmax"
+    
+    loader =make_train_loader(batch_size=64)
+    images, labels = next(iter(loader))
+    print("1 MNIST batch images:", tuple(images.shape), "labels:", tuple(labels.shape))
+    
+    model=MyNetwork()
+    optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.5)
+    criterion =nn.NLLLoss()
+
+    loss_val = train_one_batch(model,images, labels, optimizer, criterion)
+    print("1 batch loss:", loss_val)
+    
     return 0
+
+
+def train_one_batch(model, images, labels, optimizer, criterion):
+    model.train()
+    optimizer.zero_grad()
+    out = model(images)
+    loss = criterion(out, labels)
+    loss.backward()
+    optimizer.step()
+    return loss.item()
+
 
 if __name__ == "__main__":
     raise SystemExit(main(sys.argv))
