@@ -26,7 +26,7 @@ class GreekTransform:
         x = torchvision.transforms.functional.center_crop(x, (28, 28))
         return torchvision.transforms.functional.invert(x)
 
-
+#load mnist weights, freeze all,new fc2 3 ways
 def build_frozen_greek_model(weights_path: str="mnist_cnn.pt"):
     model = MyNetwork()
     model.load_state_dict(torch.load(weights_path, map_location="cpu"))
@@ -38,7 +38,7 @@ def build_frozen_greek_model(weights_path: str="mnist_cnn.pt"):
         p.requires_grad = True
     return model
 
-
+#imagefolder+greek transform, normalize
 def make_greek_loader(training_set_path: str, batch_size: int = 5):
     tfm = transforms.Compose(
         [
@@ -50,7 +50,7 @@ def make_greek_loader(training_set_path: str, batch_size: int = 5):
     ds = torchvision.datasets.ImageFolder(root=training_set_path, transform=tfm)
     return DataLoader(ds, batch_size=batch_size, shuffle=True), ds
 
-
+#train only  fc2, log loss + error per epoch
 def train_greek(model, loader, epochs: int, lr: float):
     criterion = nn.NLLLoss()
     optimizer = optim.SGD(model.fc2.parameters(), lr=lr, momentum=0.5)
@@ -79,7 +79,7 @@ def train_greek(model, loader, epochs: int, lr: float):
     return losses, errors
 
 
-    
+#cli, train, plot, save greek_cnn.pt
 def main(argv):
     parser = argparse.ArgumentParser(description="Greek letter transfer learning")
     parser.add_argument(

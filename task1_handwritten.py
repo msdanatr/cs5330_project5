@@ -1,5 +1,5 @@
 ## Dana Tran
-## CS 5330 Project 1
+## CS 5330 Project 5
 ## 04/06/26
 
 import sys
@@ -9,6 +9,8 @@ import torchvision.transforms as T
 from PIL import Image
 from task1_network import MyNetwork
 
+
+#load mnist cnn from disk
 def load_model(weights_path: str="mnist_cnn.pt"):
     model = MyNetwork()
     model.load_state_dict(torch.load(weights_path, map_location="cpu"))
@@ -16,6 +18,7 @@ def load_model(weights_path: str="mnist_cnn.pt"):
     return model
 
 
+#resize 28x28, invert ??, normalize
 def image_to_batch(path: Path, invert: bool):
     img = Image.open(path).convert("L")
     resize = T.Resize((28, 28), interpolation=T.InterpolationMode.LANCZOS)
@@ -27,7 +30,7 @@ def image_to_batch(path: Path, invert: bool):
     return t.unsqueeze(0)
 
 
-def main(argv):
+def main(argv): #all imgs in folder ->print predictions
     if len(argv) < 2:
         print("Usage: python task1_handwritten.py <folder> [--no-invert]")
         print("  folder: images of digits (e.g. 0.png .. 9.png)")

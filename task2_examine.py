@@ -11,6 +11,7 @@ from torchvision import datasets, transforms
 
 from task1_network import MyNetwork
 
+#loadcnn for conv1 inspection
 def load_model(path: str = "mnist_cnn.pt"):
     model = MyNetwork()
     model.load_state_dict(torch.load(path, map_location="cpu"))
@@ -18,6 +19,7 @@ def load_model(path: str = "mnist_cnn.pt"):
     return model
 
 
+#same transform as training..
 def mnist_train_transform():
     return transforms.Compose(
         [
@@ -35,7 +37,7 @@ def first_train_image_tensor(data_dir: str = "mnist_data"):
     img, label = ds[0]
     return img, int(label)
 
-
+#print model and weights, save pngs
 def main(argv):
     model = load_model()
     print(model)

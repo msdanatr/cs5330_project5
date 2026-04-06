@@ -1,5 +1,5 @@
 ## Dana Tran
-## CS 5330 Project 1
+## CS 5330 Project 5
 ## 04/05/26
 
 #load saved cnn and run on first 10 mnist test images
@@ -10,12 +10,15 @@ import torch
 from torchvision import datasets, transforms
 from task1_network import MyNetwork
 
+
+#undo normalize for matplot
 def denormalize_for_display(t_chw):
     mean = 0.1307
     std = 0.3081
     return (t_chw * std + mean).clamp(0.0, 1.0)
 
 
+#load weights
 def load_model(weights_path: str = "mnist_cnn.pt"):
     model = MyNetwork()
     model.load_state_dict(torch.load(weights_path, map_location="cpu"))
@@ -23,6 +26,7 @@ def load_model(weights_path: str = "mnist_cnn.pt"):
     return model
 
 
+#first 10 test outputs +3x3 plot
 def make_test_dataset(data_dir: str = "mnist_data"):
     transform = transforms.Compose(
         [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])

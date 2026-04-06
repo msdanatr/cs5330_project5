@@ -1,5 +1,5 @@
 ## Dana Tran
-## CS 5330 Project 1
+## CS 5330 Project 5
 ## 04/03/26
 
 import sys
@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 
 class MyNetwork(nn.Module):
 
-    def __init__(self):
+    def __init__(self): # set up conv / pool / dropout / fc layers for mnist
         super().__init__()
         self.conv1 = nn.Conv2d(1,10,kernel_size=5)
         self.pool =nn.MaxPool2d(2,2)
@@ -75,7 +75,7 @@ def make_train_loader(batch_size: int=64, data_dir: str="mnist_data"):
     
 #     return 0
 
-def main(argv):
+def main(argv): #train 5 epochs, plot curves, save mnist_cnn.pt
     batch_size = 64
     epochs = 5
     data_dir = "mnist_data"
@@ -136,6 +136,7 @@ def main(argv):
     return 0
 
 
+#one batch... loss, backward, optimizer step
 def train_one_batch(model, images, labels, optimizer, criterion):
     model.train()
     optimizer.zero_grad()
@@ -155,7 +156,7 @@ def make_test_loader(batch_size: int=64, data_dir: str="mnist_data"):
     )
     return DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=2)
 
-
+#train pass over all batches
 def train_one_epoch(model, train_loader, optimizer, criterion):
     model.train()
     for images, labels in train_loader:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 ## Dana Tran
-## CS 5330 Project 1
+## CS 5330 Project 5
 ## 04/03/26
 
 
@@ -13,11 +13,12 @@ import matplotlib.pyplot as plt
 import torchvision
 from torchvision import datasets
 
-
+#get mnist test split
 def get_mnist_testset(data_dir: Path):
     return datasets.MNIST(root=str(data_dir), train=False, download=True)
 
 
+#2x3 grid of first six test digits
 def plot_first_six_test_digits(testset, output_path: Path):
     indices = list(range(6))
 
@@ -35,6 +36,7 @@ def plot_first_six_test_digits(testset, output_path: Path):
     plt.close(fig)
 
 
+#arg + save plot png
 def main(argv):
     parser = argparse.ArgumentParser(description="Plot first 6 MNIST test digits")
     parser.add_argument(
