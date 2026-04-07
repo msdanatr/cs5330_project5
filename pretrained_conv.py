@@ -7,7 +7,7 @@ import sys
 import torch
 import matplotlib.pyplot as plt
 
-from torchvisino.models import resnet18, ResNet18_Weights
+from torchvision.models import resnet18, ResNet18_Weights
 
 def main(argv):
     weights = ResNet18_Weights.IMAGENET1K_V1
@@ -18,7 +18,9 @@ def main(argv):
     #first conv
     w = model.conv1.weight.detach().cpu()
     print("conv1.weight shape:", tuple(w.shape))
-
+    #second conv
+    w2 = model.layer1[0].conv1.weight.detach().cpu()
+    print("layer1[0].conv1.weight shape:", tuple(w2.shape))
 
     n_show = 16 #show 16 filters
     fig, axes = plt.subplots(4, 4, figsize=(6, 6))
