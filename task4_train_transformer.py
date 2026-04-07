@@ -77,7 +77,6 @@ def evaluate(model,loader, device, criterion):
 # main function training nettransformer on mnist
 def main(argv):
     config = NetConfig()
-    config.epochs = 1 #temp
     torch.manual_seed(config.seed)
     device = pick_device(config.device)
     print("using device:", device)
